@@ -33,16 +33,20 @@ const login = async (req, res) => {
     if (!req.body.username || !req.body.password) {
       return res.status(400).json("Please enter username & password");
     }
+    // firstly check if the user with that specific username exists or not
     const user = await User.findOne({ username: req.body.username });
+    // if not
     !user && res.status(404).json("Invalid credentials");
 
+    // then check if the password entered matches with the original password
     const isPasswordCorrect = await bcrypt.compare(
       req.body.password,
       user.password
     );
+    // if not
     !isPasswordCorrect && res.status(401).json("Invalid credentials");
-
-    const { password, ...others } = user._doc;
+    // we dont wanna show the passowrd
+    const { password, ...others } = user._doc; 
     res.status(200).json(others);
   } catch (err) {
     return res.status(500).json(err);

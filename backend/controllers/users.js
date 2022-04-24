@@ -5,16 +5,16 @@ const bcrypt = require("bcryptjs");
 // Update User
 const updateUser = async (req, res) => {
   if (req.body.userId === req.params.id) {
-    if (req.body.password) {
+    if (req.body.password) { 
       // to update our password also
       const salt = await bcrypt.genSalt(10);
       req.body.password = await bcrypt.hash(req.body.password, salt);
     }
-    try {
+    try { 
       const user = await User.findByIdAndUpdate(
         req.params.id,
         {
-          $set: req.body,
+          $set: req.body,  
         },
         { new: true }
       );
@@ -54,7 +54,7 @@ const deleteUser = async (req, res) => {
       const user = await User.findById(req.params.id);
       try {
         await Post.deleteMany({ username: user.username }); // jiska username: voh user ka username hoga voh sab del kar dena
-        await User.findByIdAndDelete(req.params.id);
+        await User.findByIdAndDelete(req.params.id); 
         return res.status(200).json("User has been deleted...");
       } catch (error) {
         return res.status(500).json(error);
